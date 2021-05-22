@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row align="center">
-      <v-col align-self="center" class="text-center">
+      <v-col align-self="center" class="text-center" >
         <svg id="organic-blob" width="600" height="600" xmlns="http://www.w3.org/2000/svg" filter="url(#goo)">
           <defs>
             <filter id="goo">
@@ -11,11 +11,11 @@
               <feComposite in="SourceGraphic" in2="goo" operator="atop"/>
             </filter>
           </defs>
-          <circle r="100" :class="[storeCapacityReached ? 'organic-blob-stop' : 'organic-blob-go']" id="Circle1"></circle>
-          <circle r="100" :class="[storeCapacityReached ? 'organic-blob-stop' : 'organic-blob-go']" id="Circle2"></circle>
-          <circle r="100" :class="[storeCapacityReached ? 'organic-blob-stop' : 'organic-blob-go']" id="Circle3"></circle>
-          <circle r="100" :class="[storeCapacityReached ? 'organic-blob-stop' : 'organic-blob-go']" id="Circle4"></circle>
-          <image class="logo" style="z-index: 100" height="300" width="300" x="150" y="150"  :href="storeCapacityReached ? assets.stop : assets.go"></image>
+          <circle r="100" :class="[storeCapacityReached ? states.stop.colorClass : states.go.colorClass]" id="Circle1"></circle>
+          <circle r="100" :class="[storeCapacityReached ? states.stop.colorClass : states.go.colorClass]" id="Circle2"></circle>
+          <circle r="100" :class="[storeCapacityReached ? states.stop.colorClass : states.go.colorClass]" id="Circle3"></circle>
+          <circle r="100" :class="[storeCapacityReached ? states.stop.colorClass : states.go.colorClass]" id="Circle4"></circle>
+          <image class="logo" style="z-index: 100" height="300" width="300" x="150" y="150"  :href="storeCapacityReached ? states.stop.image : states.go.image"></image>
         </svg>
       </v-col>
     </v-row>
@@ -27,11 +27,19 @@ export default {
   name: "BlobOrganicCircle",
   data() {
     return {
-      storeCapacityReached: true,
-      assets: {
-        stop: require("@/assets/storefront/stop.png"),
-        go: require("@/assets/storefront/go.png"),
-      }
+      storeCapacityReached: false,
+      states: {
+        stop: {
+          image: require("@/assets/storefront/stop.png"),
+          colorClass: "organic-blob-stop"
+        },
+        go: {
+          image: require("@/assets/storefront/go.png"),
+          colorClass: "organic-blob-go"
+        },
+
+
+      },
     }
   }
 }
@@ -47,9 +55,6 @@ export default {
   fill: #66e058;
 }
 
-.logo {
-  z-index: 1;
-}
 
 @keyframes from0to360 {
   from {
