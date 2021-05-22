@@ -9,13 +9,13 @@
           </v-toolbar>
           <v-card-text>
             <v-form>
-              <!-- <v-text-field
+              <v-text-field
                 prepend-icon="mdi-account"
                 name="login"
                 v-model="formData.username"
                 label="Uporabniško ime"
                 type="text"
-              ></v-text-field> -->
+              ></v-text-field>
               <v-text-field
                 prepend-icon="mdi-email"
                 name="login"
@@ -42,7 +42,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary" @click="signup">
+            <v-btn color="primary">
               Pošlji &nbsp;
               <v-icon>mdi-send</v-icon>
             </v-btn>
@@ -56,16 +56,16 @@
 export default {
   data: () => ({
     formData: {
-      // username: null,
+      username: null,
       email: null,
-      password: null,
-    },
+      password: null
+    }
   }),
   methods: {
     signup() {
-      this.$store.dispatch("auth/signup", this.formData);
-    },
-  },
+      this.$store.dispatch("signup", this.formData);
+    }
+  }
 };
 </script>
 

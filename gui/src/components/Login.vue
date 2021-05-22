@@ -11,9 +11,9 @@
             <v-form>
               <v-text-field
                 prepend-icon="mdi-account"
-                v-model="formData.email"
-                name="email"
-                label="Email naslov"
+                v-model="formData.username"
+                name="login"
+                label="Uporabniško ime"
                 type="text"
               ></v-text-field>
               <v-text-field
@@ -44,13 +44,13 @@ import { mapActions } from "vuex";
 export default {
   data: () => ({
     formData: {
-      email: null,
-      password: null,
-    },
+      username: null,
+      password: null
+    }
   }),
   methods: {
-    ...mapActions("auth", ["login", "logout"]),
-  },
+    ...mapActions("auth", ["login", "logout"])
+  }
 };
 </script>
 
