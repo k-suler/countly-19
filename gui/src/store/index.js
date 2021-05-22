@@ -3,6 +3,7 @@ import createPersistedState from "vuex-persistedstate";
 
 import storesModule from "./modules/stores/index.js";
 import authModule from "./modules/auth/index.js";
+import storefrontModule from "./modules/storefront/index.js";
 
 export default new Vuex.Store({
   plugins: [createPersistedState()],
@@ -16,5 +17,9 @@ export default new Vuex.Store({
       ...authModule,
       namespaced: true,
     },
+    storefront: {
+      ...storefrontModule,
+      namespaced: true
+    }
   },
 });

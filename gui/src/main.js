@@ -4,8 +4,10 @@ import "./registerServiceWorker";
 import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
+import VueFlipCounter from 'vue-flip-counter'
 
 Vue.config.productionTip = false;
+Vue.use(VueFlipCounter);
 
 new Vue({
   router,
