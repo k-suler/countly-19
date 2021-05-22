@@ -12,6 +12,8 @@
         <p class="subheading font-weight-regular">
           Please select store that you want to show counter.
         </p>
+
+        <v-btn :to="{ name: 'registerStore' }">Dodaj trgovino</v-btn>
       </v-col>
     </v-row>
   </v-container>

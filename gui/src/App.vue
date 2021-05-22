@@ -6,7 +6,9 @@
       dark
       v-if="$router.currentRoute.name !== 'Storefront'"
     >
-      <v-icon>mdi-counter</v-icon>
+      <v-btn :to="{ name: 'home' }" icon>
+        <v-icon>mdi-counter</v-icon>
+      </v-btn>
       <v-spacer></v-spacer>
       <template v-if="!isAuthenticated">
         <v-btn text v-if="!isAuthenticated" :to="{ name: 'login' }"
