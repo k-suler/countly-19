@@ -80,9 +80,6 @@ def run():
 
     args = parse_arguments()
 
-    # define mobileNet classes to detect
-    CLASSES = config.model_classes
-
     # load model
     net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
 
@@ -90,7 +87,7 @@ def run():
     width, height = None, None
 
     # initialize tracker
-    ct = CentroidTracker(maxDisappeared=40, maxDistance=50)
+    ct = CentroidTracker(maxDisappeared=30, maxDistance=30)
     trackers = []
     tracked_people = {}
 
@@ -134,6 +131,7 @@ def run():
         if width is None or height is None:
             (height, width) = frame.shape[:2]
 
+
         # initialite current status and list of bounding boxes
         status = "Waiting"
         bboxes = []
@@ -158,7 +156,7 @@ def run():
                     idx = int(detections[0, 0, i, 1])
 
                     # if the class label is not a person, ignore it
-                    if CLASSES[idx] != "person":
+                    if config.model_classes[idx] != "person":
                         continue
 
                     # get position (x, y) of the bounding box of the detected person
