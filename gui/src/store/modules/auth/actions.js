@@ -56,6 +56,7 @@ export default {
     context.commit("setUser", {
       token: responseData.idToken,
       userId: responseData.localId,
+      email: responseData.email,
     });
     router.replace("/");
   },

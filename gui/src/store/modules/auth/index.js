@@ -11,6 +11,7 @@ export default {
     return {
       userId: null,
       token: null,
+      email: "",
       didAutoLogout: false,
     };
   },

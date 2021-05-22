@@ -1,38 +1,25 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark v-if="$router.currentRoute.name !== 'Storefront'">
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
+    <v-app-bar
+      app
+      color="primary"
+      dark
+      v-if="$router.currentRoute.name !== 'Storefront'"
+    >
+      <v-icon>mdi-counter</v-icon>
       <v-spacer></v-spacer>
-      <v-btn :to="{ name: 'login' }">Prijava</v-btn>
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+      <template v-if="!isAuthenticated">
+        <v-btn text v-if="!isAuthenticated" :to="{ name: 'login' }"
+          >Prijava</v-btn
+        >
+      </template>
+      <template v-else>
+        <span>
+          <v-chip color="primary" text-color="white">{{ userEmail }}</v-chip>
+          <v-btn text @click="logout()">odjava</v-btn>
+        </span>
+      </template>
     </v-app-bar>
-
     <v-main>
       <router-view />
     </v-main>
@@ -40,11 +27,19 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
+
 export default {
   name: "App",
 
   data: () => ({
     //
   }),
+  computed: {
+    ...mapGetters("auth", ["userEmail", "isAuthenticated"]),
+  },
+  methods: {
+    ...mapActions("auth", ["logout"]),
+  },
 };
 </script>
