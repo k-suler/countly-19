@@ -12,6 +12,7 @@ export default {
       userId: null,
       token: null,
       didAutoLogout: false,
+      userProfile: {}
     };
   },
   mutations,

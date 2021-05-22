@@ -23,6 +23,7 @@
 <script>
 import BlobOrganicCircle from "@/components/storefront/BlobOrganicCircle";
 import BaseCounter from "@/components/storefront/BaseCounter";
+import {database, storesCollection} from "@/firebase/firebase"
 
 export default {
   name: "ViewStoreFront",
@@ -33,6 +34,22 @@ export default {
       currentNumCount: 100
     }
   },
+  mounted() {
+    storesCollection.doc("HuTUAOOYnaJMNBxTsf70\n").get().then((res) => {
+      console.log(res)})
+    database.ref("stores/Helsinki").once('value').then(res => {
+      console.log(res)
+    }).catch(err => {
+      console.log(err)
+    })
+
+    const starCountRef = database.ref('stores/HuTUAOOYnaJMNBxTsf70').orderByKey().startAt("1621723610")
+    starCountRef.on('value', (snapshot) => {
+      const data = snapshot.val();
+      console.log(data)
+    });
+
+  }
 }
 </script>
 

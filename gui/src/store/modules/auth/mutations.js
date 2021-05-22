@@ -6,5 +6,8 @@ export default {
   },
   setAutoLogout(state) {
     state.didAutoLogout = true;
+  },
+  setUserProfile(state, val) {
+    state.userProfile = val
   }
 };
