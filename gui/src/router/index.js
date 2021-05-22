@@ -4,6 +4,8 @@ import Home from "../views/Home.vue";
 // import DashboardPage from "../components/dashboard/dashboard.vue";
 import Login from "../components/Login.vue";
 import Signup from "../components/Signup.vue";
+import ViewStoreFront from "@/views/ViewStoreFront";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -25,6 +27,11 @@ const routes = [
   { path: "/signup", name: "signup", component: Signup },
   { path: "/signin", name: "login", component: Login },
   // { path: "/dashboard", component: DashboardPage },
+  {
+    path: "/storefront",
+    name: "Storefront",
+    component: ViewStoreFront,
+  },
 ];
 
 const router = new VueRouter({
