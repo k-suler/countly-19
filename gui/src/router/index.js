@@ -1,7 +1,9 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
-
+// import DashboardPage from "../components/dashboard/dashboard.vue";
+import Login from "../components/Login.vue";
+import Signup from "../components/Signup.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -19,6 +21,10 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/About.vue"),
   },
+
+  { path: "/signup", name: "signup", component: Signup },
+  { path: "/signin", name: "login", component: Login },
+  // { path: "/dashboard", component: DashboardPage },
 ];
 
 const router = new VueRouter({

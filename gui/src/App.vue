@@ -22,7 +22,7 @@
       </div>
 
       <v-spacer></v-spacer>
-
+      <v-btn :to="{ name: 'login' }">Prijava</v-btn>
       <v-btn
         href="https://github.com/vuetifyjs/vuetify/releases/latest"
         target="_blank"
