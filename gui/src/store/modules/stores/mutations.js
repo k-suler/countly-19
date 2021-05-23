@@ -1,11 +1,12 @@
 export default {
-  registerStore(state, payload) {
-    state.stores.push(payload);
+  setStoreInfo(state, payload) {
+    state.name = payload.name
+    state.description = payload.name
+    state.maxNumberOfCustomers = payload.name
+    state.groundTruth = payload.name
+    state.startTim = payload.name
   },
-  setStore(state, payload) {
-    state.stores = payload;
-  },
-  setFetchTimestamp(state) {
-    state.lastFetch = new Date().getTime();
-  },
+  setAllStores(state, payload){
+    state.allStores = payload
+  }
 };

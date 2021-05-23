@@ -6,23 +6,23 @@
       dark
       v-if="$router.currentRoute.name !== 'Storefront'"
     >
-      <v-btn :to="{ name: 'home' }" icon>
+      <v-btn :to="{ name: 'home' }" icon plain>
         <v-icon>mdi-counter</v-icon>
       </v-btn>
       <v-spacer></v-spacer>
       <template v-if="!isAuthenticated">
         <v-btn text v-if="!isAuthenticated" :to="{ name: 'login' }"
-          >Prijava</v-btn
+          >Login</v-btn
         >
       </template>
       <template v-else>
         <span>
           <v-chip color="primary" text-color="white">{{ userEmail }}</v-chip>
-          <v-btn text @click="logout()">odjava</v-btn>
+          <v-btn text @click="logout()">Logout</v-btn>
         </span>
       </template>
     </v-app-bar>
-    <v-main>
+    <v-main id="main">
       <router-view />
     </v-main>
   </v-app>
@@ -41,7 +41,42 @@ export default {
     ...mapGetters("auth", ["userEmail", "isAuthenticated"]),
   },
   methods: {
-    ...mapActions("auth", ["logout"]),
+    ...mapActions("auth", ["logout", "fetchAllStores"]),
+    ...mapActions("stores", ["fetchAllStores"]),
   },
+  created() {
+    this.fetchAllStores()
+  }
 };
 </script>
+<style>
+#main {
+  background-image: url("./assets/wave.svg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: bottom;
+}
+
+html {
+  overflow-y: auto;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #010101;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+</style>
