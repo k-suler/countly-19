@@ -131,3 +131,7 @@ dmypy.json
 
 counter/virtualenv/
 detector/node_modules/
+
+tracker/data/
+tracker/creds/
+gui/src/firebase/firebase.js
