@@ -18,13 +18,7 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
 export default {
-  name: "WelcomePage",
-  data: () => ({
-    ecosystem: [],
-    importantLinks: [],
-    whatsNext: [],
-  }),
+  name: "Home",
 };
 </script>

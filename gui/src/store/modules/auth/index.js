@@ -9,10 +9,6 @@ Vue.use(Vuex);
 export default {
   state() {
     return {
-      userId: null,
-      token: null,
-      email: "",
-      didAutoLogout: false,
       userProfile: {},
     };
   },
