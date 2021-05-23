@@ -30,7 +30,12 @@ const routes = [
   { path: "/signup", name: "signup", component: Signup },
   { path: "/login", name: "login", component: Login },
   { path: "/store/register", name: "registerStore", component: RegisterStore },
-  { path: "/chart", name: "chart", component: StoreChart },
+  {
+    path: "/chart/:storeId",
+    props: true,
+    name: "chart",
+    component: StoreChart,
+  },
   // { path: "/dashboard", component: DashboardPage },
   {
     path: "/storefront",
