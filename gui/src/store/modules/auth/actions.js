@@ -82,18 +82,18 @@ export default {
   //     });
   //   }
   // },
-  // logout(context) {
-  //   localStorage.removeItem("token");
-  //   localStorage.removeItem("userId");
-  //   localStorage.removeItem("tokenExpiration");
-  //
-  //   clearTimeout(timer);
-  //
-  //   context.commit("setUser", {
-  //     token: null,
-  //     userId: null,
-  //   });
-  // },
+  logout(context) {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("tokenExpiration");
+
+    clearTimeout(timer);
+
+    context.commit("setUser", {
+      token: null,
+      userId: null,
+    });
+  },
   // autoLogout(context) {
   //   context.dispatch("logout");
   //   context.commit("setAutoLogout");

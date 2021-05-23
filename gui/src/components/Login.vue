@@ -4,23 +4,23 @@
       <v-flex xs12 sm8 md6>
         <v-card class="elevation-12">
           <v-toolbar dark color="primary">
-            <v-toolbar-title>Prijava</v-toolbar-title>
+            <v-toolbar-title>Login</v-toolbar-title>
             <v-spacer></v-spacer>
           </v-toolbar>
           <v-card-text>
             <v-form>
               <v-text-field
                 prepend-icon="mdi-account"
-                v-model="formData.username"
+                v-model="formData.email"
                 name="login"
-                label="Uporabniško ime"
+                label="Email address"
                 type="text"
               ></v-text-field>
               <v-text-field
                 prepend-icon="mdi-lock"
                 v-model="formData.password"
                 name="password"
-                label="Geslo"
+                label="Password"
                 id="password"
                 type="password"
               ></v-text-field>
@@ -29,7 +29,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="primary" @click="login(formData)">
-              Prijava &nbsp;
+              Login &nbsp;
               <v-icon>mdi-send</v-icon>
             </v-btn>
           </v-card-actions>
@@ -44,7 +44,7 @@ import { mapActions } from "vuex";
 export default {
   data: () => ({
     formData: {
-      username: null,
+      email: null,
       password: null
     }
   }),

@@ -1,3 +1,5 @@
+import {auth} from "@/firebase/firebase";
+
 export default {
   userId(state) {
     return state.userId;
@@ -9,7 +11,7 @@ export default {
     return state.token;
   },
   isAuthenticated(state) {
-    return !!state.token;
+    return !!auth.currentUser;
   },
   didAutoLogout(state) {
     return state.didAutoLogout;
