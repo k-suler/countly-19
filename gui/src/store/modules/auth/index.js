@@ -13,6 +13,7 @@ export default {
       token: null,
       email: "",
       didAutoLogout: false,
+      userProfile: {}
     };
   },
   mutations,
