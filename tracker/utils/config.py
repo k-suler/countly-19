@@ -5,7 +5,7 @@ model_classes = ["background", "aeroplane", "bicycle", "bird", "boat",
                  "sofa", "train", "tvmonitor"]
 
 # set to True when developing to plot tracking information
-draw = False
+draw = True
 
 # confidence score
 confidence = 0.4

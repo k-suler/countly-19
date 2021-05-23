@@ -41,9 +41,9 @@ def draw_object_id(frame, object_id, centroid):
 
 def draw_tracking_information(frame, height, cnt_in, cnt_out, sum_people):
     """ Plot tracking information """
-    cv2.putText(frame, f"Enter: {cnt_in}", (10, height - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 2)
-    cv2.putText(frame, f"Exit: {cnt_out}", (10, height - 40), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 2)
-    cv2.putText(frame, f"Total people inside: {sum_people}", (265, height - 60), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 2)
+    cv2.putText(frame, f"Enter: {cnt_in}", (10, height - 100), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 2)
+    cv2.putText(frame, f"Exit: {cnt_out}", (10, height - 140), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 2)
+    cv2.putText(frame, f"Total people inside: {sum_people}", (265, height - 160), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 2)
 
 
 def send_to_firebase(current_time, count):
