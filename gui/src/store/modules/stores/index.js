@@ -6,14 +6,14 @@ export default {
   namespaced: true,
   state() {
     return {
-      stores: [
-        {
-          id: "c1",
-          name: "Merkator",
-          maxNumberOfCustomers: 100,
-          description: "",
-        },
-      ],
+      tore: {
+        name: "",
+        description: "",
+        maxNumberOfCustomers: "",
+        groundTruth: "",
+        startTime: ""
+      },
+      allStores: []
     };
   },
   mutations,

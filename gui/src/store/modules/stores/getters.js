@@ -1,5 +1,8 @@
 export default {
-  stores(state) {
-    return state.stores;
+  getStoreData(state){
+    return state.store;
   },
+  getAllStores(state){
+    return state.allStores
+  }
 };

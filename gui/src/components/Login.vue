@@ -4,7 +4,7 @@
       <v-flex xs12 sm8 md6>
         <v-card class="elevation-12">
           <v-toolbar dark color="primary">
-            <v-toolbar-title>Login</v-toolbar-title>
+            <v-toolbar-title style="color: #010101">Login</v-toolbar-title>
             <v-spacer></v-spacer>
           </v-toolbar>
           <v-card-text>
@@ -28,9 +28,9 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary" @click="login(formData)">
+            <v-btn color="primary" @click="login(formData)" style="color: #010101" block>
               Login &nbsp;
-              <v-icon>mdi-send</v-icon>
+              <v-icon class="ml-3">mdi-send</v-icon>
             </v-btn>
           </v-card-actions>
         </v-card>
