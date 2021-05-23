@@ -1,15 +1,25 @@
 <template>
-  <div class="small">
-    <line-chart :chart-data="datacollection"></line-chart>
-    <button @click="fillData()">Randomize</button>
-  </div>
+  <v-container class="small">
+    <v-row>
+      <v-col>{{ store.name }}</v-col>
+      <v-col cols="12">
+        <template v-if="datacollection && storeId">
+          <line-chart :chart-data="datacollection"></line-chart>
+        </template>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
 import LineChart from "./LineChart.js";
 import { database, storesCollection } from "@/firebase/firebase";
+import dayjs from "dayjs";
 
 export default {
+  props: {
+    storeId: String,
+  },
   components: {
     LineChart,
   },
@@ -23,40 +33,55 @@ export default {
         name: "",
       },
       graph: null,
-      timeStep: null,
+      timeStep: 5,
     };
   },
   async mounted() {
-    await storesCollection
-      .doc("HuTUAOOYnaJMNBxTsf70")
-      .get()
-      .then((res) => {
-        console.log(res.data());
-        this.setData(res.data());
+    if (this.storeId) {
+      await storesCollection
+        .doc(this.storeId)
+        .get()
+        .then((res) => {
+          console.log(res.data());
+          this.setData(res.data());
+        });
+      const vm = this;
+      const starCountRef = database
+        .ref(`stores/${this.storeId}`)
+        .orderByKey()
+        .startAt(vm.store.startTime.seconds + "");
+      starCountRef.on("value", (snapshot) => {
+        const data = snapshot.val();
+        this.fillData(data);
       });
-
-    const starCountRef = database
-      .ref("stores/HuTUAOOYnaJMNBxTsf70")
-      .orderByKey()
-      .startAt("1621729668268");
-    starCountRef.on("value", (snapshot) => {
-      const data = snapshot.val();
-
-      this.fillData(data);
-      console.log(data);
-    });
+    }
   },
   methods: {
     fillData(data) {
+      const y = [];
+      const x = [];
+      let counter = 0;
+      const startingFrom = Math.floor(this.store.startTime.seconds / 1000);
+      const timeNow = Math.floor(Date.now() / 1000);
       debugger;
+      let stepCount = this.store.groundTruth;
+      data;
+      for (const [key, value] of Object.entries(data)) {
+        if (Math.floor(key / 1000) < timeNow) {
+          let label = new Date(Number(key));
+          x.push(dayjs(label).format("MM-DD HH:mm"));
+          stepCount = stepCount + value;
+          y.push(stepCount);
+        }
+      }
 
       this.datacollection = {
-        labels: [this.getRandomInt(), this.getRandomInt()],
+        labels: x,
         datasets: [
           {
             label: "Number of customers",
             backgroundColor: "#f87979",
-            data: [this.getRandomInt(), this.getRandomInt()],
+            data: y,
           },
         ],
       };
