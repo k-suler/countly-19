@@ -107,28 +107,7 @@ export default {
       form.password
     );
     console.log(user);
-
-    localStorage.setItem("token", responseData.idToken);
-    localStorage.setItem("userId", responseData.localId);
-    localStorage.setItem("tokenExpiration", expirationDate);
-
-    timer = setTimeout(function () {
-      context.dispatch("autoLogout");
-    }, expiresIn);
-
-    context.commit("setUser", {
-      token: responseData.idToken,
-      userId: responseData.localId,
-      email: responseData.email,
-    });
-    router.replace("/");
-  },
-  tryLogin(context) {
-    const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId");
-    const tokenExpiration = localStorage.getItem("tokenExpiration");
-
-    router.push("/storefront");
+    await router.push("/storefront");
   },
   async fetStoreData({ commit }, storeId) {
     storesCollection
