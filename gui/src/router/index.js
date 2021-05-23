@@ -4,7 +4,6 @@ import Home from "../views/Home.vue";
 import {auth} from "@/firebase/firebase";
 import Login from "../components/Login.vue";
 import Signup from "../components/Signup.vue";
-
 import ViewStoreFront from "@/views/ViewStoreFront";
 import StoreChart from "@/components/StoreChart.vue";
 import ViewAllStores from "@/views/ViewAllStores";
@@ -18,24 +17,19 @@ const routes = [
         component: Home,
     },
     {
-        path: "/about",
-        name: "about",
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () =>
-            import(/* webpackChunkName: "about" */ "../views/About.vue"),
-    },
-
-    {path: "/signup", name: "signup", component: Signup},
-    {path: "/login", name: "login", component: Login},
+        path: "/signup",
+        name: "signup",
+        component: Signup},
+    {
+        path: "/login",
+        name: "login",
+        component: Login},
     {
         path: "/chart/:storeId",
         props: true,
         name: "chart",
         component: StoreChart,
     },
-    // { path: "/dashboard", component: DashboardPage },
     {
         path: "/stores",
         name: "stores",
