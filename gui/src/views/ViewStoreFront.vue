@@ -31,23 +31,26 @@ export default {
   data() {
     return {
       maxNumOfPeople: 10,
-      currentNumCount: 100
+      currentNumCount: 100,
+      storeId: null
     }
   },
+  created() {
+    this.storeId = this.$route.query.storeId
+  },
   mounted() {
-    storesCollection.doc("HuTUAOOYnaJMNBxTsf70\n").get().then((res) => {
-      console.log(res)})
-    database.ref("stores/Helsinki").once('value').then(res => {
-      console.log(res)
-    }).catch(err => {
-      console.log(err)
-    })
+    if (this.storeId) {
+      storesCollection.doc(`${this.storeId}`).get().then((res) => {
+        console.log(res.data())
+      })
 
-    const starCountRef = database.ref('stores/HuTUAOOYnaJMNBxTsf70').orderByKey().startAt("1621723610")
-    starCountRef.on('value', (snapshot) => {
-      const data = snapshot.val();
-      console.log(data)
-    });
+      const starCountRef = database.ref(`stores/${this.storeId}`).orderByKey().startAt("1621723610")
+      starCountRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        console.log(data)
+      });
+    }
+
 
   }
 }
