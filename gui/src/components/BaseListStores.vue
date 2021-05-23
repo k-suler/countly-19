@@ -45,9 +45,7 @@ export default {
   },
   methods: {
     openStoreAnalysis(store) {
-      console.log("Open")
-      console.log(store)
-      this.$router.push({name: "chart", query: {storeId: store.storeId}})
+      this.$router.push({name: "chart", params: {storeId: store.storeId}})
     }
   }
 }
@@ -55,13 +53,13 @@ export default {
 
 <style scoped>
 .imageHover:hover {
-  -webkit-transition: transform 0.6s ease-in;
+  -webkit-transition: transform 0.3s ease-in;
   transform: scale(1.1);
   z-index: 2;
 }
 
 .imageHover:not( :hover){
-  -webkit-transition: transform 0.6s ease-out;
+  -webkit-transition: transform 0.3s ease-out;
 }
 
 </style>
