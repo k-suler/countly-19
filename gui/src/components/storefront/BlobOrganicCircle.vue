@@ -27,7 +27,7 @@ export default {
   name: "BlobOrganicCircle",
   data() {
     return {
-      storeCapacityReached: true,
+      storeCapacityReached: false,
       assets: {
         stop: require("@/assets/storefront/stop.png"),
         go: require("@/assets/storefront/go.png"),

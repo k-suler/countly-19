@@ -83,15 +83,11 @@ export default {
   //   }
   // },
   logout(context) {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("tokenExpiration");
-
-    clearTimeout(timer);
-
-    context.commit("setUser", {
-      token: null,
-      userId: null,
+    fb.auth.signOut().then(() => {
+      // Sign-out successful.
+      router.push("/login");
+    }).catch((error) => {
+      // An error happened.
     });
   },
   // autoLogout(context) {
@@ -107,7 +103,7 @@ export default {
       form.password
     );
     console.log(user);
-    await router.push("/storefront");
+    await router.push("/");
   },
   async fetStoreData({ commit }, storeId) {
     storesCollection
