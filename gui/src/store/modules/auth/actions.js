@@ -83,12 +83,15 @@ export default {
   //   }
   // },
   logout(context) {
-    fb.auth.signOut().then(() => {
-      // Sign-out successful.
-      router.push("/login");
-    }).catch((error) => {
-      // An error happened.
-    });
+    fb.auth
+      .signOut()
+      .then(() => {
+        // Sign-out successful.
+        router.push("/login");
+      })
+      .catch((error) => {
+        // An error happened.
+      });
   },
   // autoLogout(context) {
   //   context.dispatch("logout");
