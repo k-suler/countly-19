@@ -1,0 +1,20 @@
+# image name (\t) object index
+PennPed00001.png	5
+PennPed00002.png	6
+PennPed00005.png	5
+PennPed00006.png	4
+PennPed00008.png	4
+PennPed00009.png	7
+PennPed00010.png	5
+PennPed00010.png	6
+PennPed00011.png	2
+PennPed00013.png	4
+PennPed00014.png	4
+PennPed00021.png	3
+PennPed00022.png	5
+PennPed00025.png	2
+PennPed00025.png	3
+PennPed00027.png	3
+PennPed00033.png	4
+PennPed00034.png	4
+PennPed00035.png	3
