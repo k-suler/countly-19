@@ -13,13 +13,10 @@ export default {
       });
   },
   async login({ dispatch }, form) {
-    console.log(form);
-    // sign user in
-    const { user } = await fb.auth.signInWithEmailAndPassword(
+    await fb.auth.signInWithEmailAndPassword(
       form.email,
       form.password
     );
-    console.log(user);
-    await router.push("/");
+    await router.push("/stores");
   },
 };

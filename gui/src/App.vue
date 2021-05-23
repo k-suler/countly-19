@@ -1,10 +1,10 @@
 <template>
   <v-app>
     <v-app-bar
-      app
-      color="primary"
-      dark
-      v-if="$router.currentRoute.name !== 'Storefront'"
+        app
+        color="primary"
+        dark
+        v-if="$router.currentRoute.name !== 'Storefront'"
     >
       <v-btn :to="{ name: 'home' }" icon plain large style="color: #010101">
         <v-icon>mdi-counter</v-icon>
@@ -30,15 +30,26 @@
         </v-tooltip>
 
       </template>
+
+      <template v-else>
+        <v-btn
+            color="accent"
+            dark
+            style="color: #010101"
+            @click="login"
+        >
+          Login
+        </v-btn>
+      </template>
     </v-app-bar>
     <v-main id="main">
-      <router-view />
+      <router-view/>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import {mapGetters, mapActions} from "vuex";
 
 export default {
   name: "App",
@@ -52,6 +63,9 @@ export default {
   methods: {
     ...mapActions("auth", ["logout", "fetchAllStores"]),
     ...mapActions("stores", ["fetchAllStores"]),
+    login(){
+      this.$router.push({name: "login"})
+    }
   },
   created() {
     this.fetchAllStores()

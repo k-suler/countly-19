@@ -5,13 +5,16 @@
           v-for="(store, i) in allStores"
           :key="i"
           align-self="center"
+          cols="12"
+          sm="6"
       >
         <v-card
             selectable
             @click="openStoreAnalysis(store)"
             class="imageHover"
             style="border-radius: 10px"
-            max-width="20vw">
+
+            >
           <v-img
               :src="store.logo"
               :alt="`${store.description}`"
@@ -42,9 +45,11 @@ export default {
   },
   mounted() {
     this.allStores = this.getAllStores
+    console.log(this.getAllStores)
   },
   methods: {
     openStoreAnalysis(store) {
+      console.log(store)
       this.$router.push({name: "chart", params: {storeId: store.storeId}})
     }
   }

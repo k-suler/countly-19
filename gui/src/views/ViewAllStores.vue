@@ -10,21 +10,22 @@
         <p>we will count you</p>
 
         <p class="subheading font-weight-regular">
-          Please login to viev all available stores to monitor.
+          Please select a store that you would like to analize.
         </p>
+      </v-col>
+    </v-row>
+    <v-row align="center" justify="center">
+      <v-col align-self="center" cols="12" lg="8" md="6">
+        <BaseListStores/>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import BaseListStores from "@/components/BaseListStores";
 export default {
-  name: "WelcomePage",
-  data: () => ({
-    ecosystem: [],
-    importantLinks: [],
-    whatsNext: [],
-  }),
+  name: "ViewAllStores",
+  components: {BaseListStores},
 };
 </script>

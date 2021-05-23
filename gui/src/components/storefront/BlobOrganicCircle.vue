@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-row align="center">
+    <v-row align="center" dense>
       <v-col align-self="center" class="text-center">
         <svg id="organic-blob" width="600" height="600" xmlns="http://www.w3.org/2000/svg" filter="url(#goo)">
           <defs>
@@ -25,9 +25,11 @@
 <script>
 export default {
   name: "BlobOrganicCircle",
+  props: {
+    storeCapacityReached: Boolean
+  },
   data() {
     return {
-      storeCapacityReached: false,
       assets: {
         stop: require("@/assets/storefront/stop.png"),
         go: require("@/assets/storefront/go.png"),
