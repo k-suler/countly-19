@@ -47,7 +47,7 @@ export default {
     openStoreAnalysis(store) {
       console.log("Open")
       console.log(store)
-      this.$router.push({name: "chart", query: {storeId: store}})
+      this.$router.push({name: "chart", query: {storeId: store.storeId}})
     }
   }
 }

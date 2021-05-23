@@ -14,7 +14,7 @@ export default {
         (await storesCollection
             .get())
             .forEach(doc => {
-                stores.push(doc.data())
+                stores.push({"storeId": doc.ref.id, ...doc.data()})
             })
         commit("setAllStores", stores)
     }
