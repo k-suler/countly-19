@@ -4,7 +4,7 @@
         app
         color="primary"
         dark
-        v-if="$router.currentRoute.name !== 'Storefront'"
+        v-if="$router.currentRoute.name !== 'storefront'"
     >
       <v-btn :to="{ name: 'home' }" icon plain large style="color: #010101">
         <v-icon>mdi-counter</v-icon>

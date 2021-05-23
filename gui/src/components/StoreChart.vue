@@ -1,7 +1,7 @@
 <template>
   <v-container class="small">
-    <v-card class="pa-10">
-      <v-row>
+    <v-card>
+      <v-row  class="pa-10">
         <v-col>Statistics for store: {{ store.name }}</v-col>
         <v-col cols="12">
           <template>
@@ -9,13 +9,16 @@
           </template>
         </v-col>
       </v-row>
+      <v-card-actions>
+        <v-btn block color="primary" :to="{name: 'storefront', params: {storeId: storeId}} ">Go to live counter</v-btn>
+      </v-card-actions>
     </v-card>
   </v-container>
 </template>
 
 <script>
 import LineChart from "./LineChart.js";
-import { database, storesCollection } from "@/firebase/firebase";
+import {database, storesCollection} from "@/firebase/firebase";
 import dayjs from "dayjs";
 
 export default {
@@ -49,16 +52,16 @@ export default {
   async mounted() {
     if (this.storeId) {
       await storesCollection
-        .doc(this.storeId)
-        .get()
-        .then((res) => {
-          this.setData(res.data());
-        });
+          .doc(this.storeId)
+          .get()
+          .then((res) => {
+            this.setData(res.data());
+          });
       const vm = this;
       const starCountRef = database
-        .ref(`stores/${this.storeId}`)
-        .orderByKey()
-        .startAt(`${vm.store.startTime.seconds}`);
+          .ref(`stores/${this.storeId}`)
+          .orderByKey()
+          .startAt(`${vm.store.startTime.seconds}`);
 
       starCountRef.on("value", (snapshot) => {
         const data = snapshot.val();
@@ -97,7 +100,8 @@ export default {
     setData(data) {
       this.store = data;
     },
-    makeGraph(timeFrame) {},
+    makeGraph(timeFrame) {
+    },
 
     getRandomInt() {
       return Math.floor(Math.random() * (50 - 5 + 1)) + 5;

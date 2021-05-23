@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-row align="center" justify="center" dense no-gutters>
-      <v-col align-self="center" v-for="(counter, i) in counters" :key="i" cols="2" class="mx-1">
+      <v-col align-self="center" v-for="(counter, i) in counters" :key="i" cols="2" class="text-center mx-1">
         <FlipCounter
             :value="counter"
             size="150"
