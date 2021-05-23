@@ -1,18 +1,26 @@
-import datetime as datetime
+import firebase_admin
+from firebase_admin import db
 
-from utils.centroidtracker import CentroidTracker
-from utils.trackableobejct import TrackableObject
-from imutils.video import VideoStream
-from imutils.video import FPS
+from utils.peopletracker import PeopleTracker
+from utils.trackablepeople import TrackableObject
 from utils import config
-import time, schedule, csv
 import numpy as np
 import argparse, imutils
 import time, dlib, cv2
-import datetime
-from itertools import zip_longest
 
 t0 = time.time()
+
+""" Connect to Firebase Realtime """
+creds = firebase_admin.credentials.Certificate('creds/countly-19.json')
+firebase_admin.initialize_app(creds, {
+    'databaseURL': "https://countly-19-default-rtdb.europe-west1.firebasedatabase.app"
+})
+
+
+def load_model():
+    """ Load detection model """
+    return cv2.dnn.readNetFromCaffe('models/MobileNetSSD_deploy.prototxt',
+                                    'models/MobileNetSSD_deploy.caffemodel')
 
 
 def draw_prediction_line(frame, width, height, i):
@@ -29,46 +37,25 @@ def draw_object_id(frame, object_id, centroid):
     cv2.circle(frame, (centroid[0], centroid[1]), 4, (255, 255, 255), -1)
 
 
-def draw_tracking_information(frame, height, cnt_in, cnt_out, status, sum_people):
+def draw_tracking_information(frame, height, cnt_in, cnt_out, sum_people):
     """ Plot tracking information """
     cv2.putText(frame, f"Enter: {cnt_in}", (10, height - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 2)
     cv2.putText(frame, f"Exit: {cnt_out}", (10, height - 40), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 2)
-    cv2.putText(frame, f"Status: {status}", (10, height - 60), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 2)
     cv2.putText(frame, f"Total people inside: {sum_people}", (265, height - 60), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 2)
 
 
-def check_people_limit(frame, sum_people):
-    """ Check if the limit is exceeded """
-    if sum_people >= config.max_limit:
-        cv2.putText(frame, "-ALERT: People limit exceeded-", (10, frame.shape[0] - 80),
-                    cv2.FONT_HERSHEY_COMPLEX, 0.5, (0, 0, 255), 2)
-        print("WARNING: There are too many people inside the store.")
-
-
-def save_data(cnt_in, cnt_out, sum_people):
-    datetime = [datetime.datetime.now()]
-    d = [datetime, cnt_in, cnt_out, sum_people]
-    export_data = zip_longest(*d, fillvalue = '')
-
-    with open('Log.csv', 'w', newline='') as myfile:
-        wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
-        wr.writerow(("End Time", "In", "Out", "Total Inside"))
-        wr.writerows(export_data)
+def send_to_firebase(current_time, count):
+    """ Send data to Firebase Realtime """
+    ref = db.reference("/stores")
+    store_id = ref.child('HuTUAOOYnaJMNBxTsf70')
+    store_id.update({current_time: count})
 
 
 def parse_arguments():
     # construct the argument parse and parse the arguments
     args = argparse.ArgumentParser()
-    args.add_argument("-p", "--prototxt", required=False,
-                      help="path to Caffe 'deploy' prototxt file")
-    args.add_argument("-m", "--model", required=True,
-                      help="path to Caffe pre-trained model")
     args.add_argument("-i", "--input", type=str,
                       help="path to optional input video file")
-    args.add_argument("-c", "--confidence", type=float, default=0.4,
-                      help="minimum probability to filter weak detections")
-    args.add_argument("-s", "--skip-frames", type=int, default=30,
-                      help="# of skip frames between detections")
     return vars(args.parse_args())
 
 
@@ -81,13 +68,13 @@ def run():
     args = parse_arguments()
 
     # load model
-    net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
+    net = load_model()
 
     # initialize width and height of the frame
     width, height = None, None
 
     # initialize tracker
-    ct = CentroidTracker(maxDisappeared=30, maxDistance=30)
+    ct = PeopleTracker(maxDisappeared=30, maxDistance=30)
     trackers = []
     tracked_people = {}
 
@@ -96,19 +83,8 @@ def run():
     cnt_out = 0
     total = []
 
-    # start the frames per second throughput estimator
-    fps = FPS().start()
-
-    # if a video path was not supplied, grab a reference to the ip camera
-    if not args.get("input", False):
-        print("[INFO] Starting the live stream..")
-        vs = VideoStream(config.url).start()
-        time.sleep(2.0)
-
-    # otherwise, grab a reference to the video file
-    else:
-        print("[INFO] Starting the video..")
-        vs = cv2.VideoCapture(args["input"])
+    print("[INFO] Starting the video..")
+    vs = cv2.VideoCapture(args["input"])
 
     ###############################
     ###  END OF INITIALIZATION  ###
@@ -116,11 +92,10 @@ def run():
 
     while True:
         frame = vs.read()
-        frame = frame[1] if args.get("input", False) else frame
+        frame = frame[1]
 
-        # if we are viewing a video and we did not grab a frame then we
-        # have reached the end of the video
-        if args["input"] is not None and frame is None:
+        # if frame is None, the video reach end
+        if frame is None:
             break
 
         # resize the video to 500 pixels and convert to RGB
@@ -131,28 +106,24 @@ def run():
         if width is None or height is None:
             (height, width) = frame.shape[:2]
 
+        entrance = height / 2
 
-        # initialite current status and list of bounding boxes
-        status = "Waiting"
         bboxes = []
 
-        run_detection = total_frames % args["skip_frames"] == 0
+        run_detection = total_frames % config.skip_frames == 0
         if run_detection:
-            status = "Detecting"
+            print("[INFO] Start with detecting")
             trackers = []
 
-            # convert the frame to a blob and start with the detction
+            # convert the frame to a blob and start with the detection
             blob = cv2.dnn.blobFromImage(frame, 0.007843, (width, height), 127.5)
             net.setInput(blob)
-            detections = net.forward()
 
-            # loop over the detections
+            detections = net.forward()
             for i in np.arange(0, detections.shape[2]):
                 # get the confidence
                 confidence = detections[0, 0, i, 2]
-
-                if confidence > args["confidence"]:
-                    # get the index
+                if confidence > config.confidence:
                     idx = int(detections[0, 0, i, 1])
 
                     # if the class label is not a person, ignore it
@@ -170,10 +141,9 @@ def run():
 
                     # add the tracker to the current list of trackers
                     trackers.append(tracker)
-
         else:
             for tracker in trackers:
-                status = "Tracking"
+                print("[INFO] Start with tracking")
 
                 # update the tracker and us ecurrent position
                 tracker.update(rgb)
@@ -188,8 +158,9 @@ def run():
                 # add the bounding box coordinates to the rectangles list
                 bboxes.append((x_start, y_start, x_end, y_end))
 
-        # draw a prediction line, determine whether person going up (out of the "store") or down (in the "store")
-        draw_prediction_line(frame, width, height, i)
+        if config.draw:
+            # draw a prediction line, determine whether person going up (out of the "store") or down (in the "store")
+            draw_prediction_line(frame, width, height, i)
 
         # get current people on the video
         visible_people = ct.update(bboxes)
@@ -208,48 +179,34 @@ def run():
 
                 # check to see if the object has been counted or not
                 if not tracked_person.is_counted:
-                    # if direction negative and centroid is above the center line, count out
-                    if direction < 0 and position[1] < height // 2:
+                    # if direction negative and position is below the limit then person goes out of the store
+                    if direction < 0 and position[1] < entrance:
                         cnt_out += 1
                         tracked_person.is_counted = True
+                        send_to_firebase(int(time.time() * 1000), -1)
 
-                    # if direction positive and centroid is below the center line, count in
-                    elif direction > 0 and position[1] > height // 2:
+                    # if direction positive and position is above the limit then person goes in the store
+                    elif direction > 0 and position[1] > entrance:
                         cnt_in += 1
                         tracked_person.is_counted = True
-
-                        # check if there is too many people inside
-                        check_people_limit(frame, total)
+                        send_to_firebase(int(time.time() * 1000), 1)
 
                     total = cnt_in - cnt_out
-            print(f"Count in: {cnt_in}, count out: {cnt_out}, total: {total}, time: {datetime.datetime.now()}")
 
             # store the trackable object in our dictionary
             tracked_people[people_id] = tracked_person
 
-            draw_object_id(frame, people_id, position)
+            if config.draw:
+                draw_object_id(frame, people_id, position)
 
-        draw_tracking_information(frame, height, cnt_in, cnt_out, status, total)
-
-        # Initiate a simple log to save data at end of the day
-        if config.save_data:
-            save_data(cnt_in, cnt_out, total)
+        if config.draw:
+            draw_tracking_information(frame, height, cnt_in, cnt_out, total)
 
         # show the output frame
-        cv2.imshow("Real-Time Monitoring/Analysis Window", frame)
-        key = cv2.waitKey(1)
-
-        # if the `q` key was pressed, break from the loop
-        if key == ord("q"):
-            break
+        cv2.imshow("Real-Time monitoring", frame)
+        cv2.waitKey(1)
 
         total_frames += 1
-        fps.update()
-
-    # stop the timer and display FPS information
-    fps.stop()
-    print(f"[INFO] elapsed time: {fps.elapsed()}")
-    print(f"[INFO] approx. FPS: {fps.fps()}")
 
     # close any open windows
     cv2.destroyAllWindows()

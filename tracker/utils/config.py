@@ -3,8 +3,11 @@ model_classes = ["background", "aeroplane", "bicycle", "bird", "boat",
                  "dog", "horse", "motorbike", "person", "pottedplant", "sheep",
                  "sofa", "train", "tvmonitor"]
 
-max_limit = 5
 
-save_data = False
+draw = True
 
-url = ''
+confidence = 0.4
+
+skip_frames = 30
+
+store_id = "HuTUAOOYnaJMNBxTsf70"

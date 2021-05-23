@@ -3,28 +3,21 @@ from scipy.spatial import distance as dist
 from collections import OrderedDict
 import numpy as np
 
-class CentroidTracker:
+
+class PeopleTracker:
     def __init__(self, maxDisappeared=50, maxDistance=50):
-        self.nextObjectID = 0
+        self.next_person_id = 0
         self.objects = OrderedDict()
         self.disappeared = OrderedDict()
-
-        # store the number of maximum consecutive frames a given
-        # object is allowed to be marked as "disappeared" until we
-        # need to deregister the object from tracking
         self.maxDisappeared = maxDisappeared
-
-        # store the maximum distance between centroids to associate
-        # an object -- if the distance is larger than this maximum
-        # distance we'll start to mark the object as "disappeared"
         self.maxDistance = maxDistance
 
     def register(self, centroid):
         # when registering an object we use the next available object
         # ID to store the centroid
-        self.objects[self.nextObjectID] = centroid
-        self.disappeared[self.nextObjectID] = 0
-        self.nextObjectID += 1
+        self.objects[self.next_person_id] = centroid
+        self.disappeared[self.next_person_id] = 0
+        self.next_person_id += 1
 
     def deregister(self, objectID):
         # to deregister an object ID we delete the object ID from
@@ -36,8 +29,6 @@ class CentroidTracker:
         # check to see if the list of input bounding box rectangles
         # is empty
         if len(rects) == 0:
-            # loop over any existing tracked objects and mark them
-            # as disappeared
             for objectID in list(self.disappeared.keys()):
                 self.disappeared[objectID] += 1
 
@@ -75,10 +66,6 @@ class CentroidTracker:
             objectIDs = list(self.objects.keys())
             objectCentroids = list(self.objects.values())
 
-            # compute the distance between each pair of object
-            # centroids and input centroids, respectively -- our
-            # goal will be to match an input centroid to an existing
-            # object centroid
             D = dist.cdist(np.array(objectCentroids), inputCentroids)
 
             # in order to perform this matching we must (1) find the
