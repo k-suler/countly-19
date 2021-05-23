@@ -1,5 +1,6 @@
 import router from "@/router/index";
 import * as fb from "@/firebase/firebase";
+import { storesCollection } from "@/firebase/firebase";
 export default {
   // async login(context, payload) {
   //   return context.dispatch("auth", {
@@ -105,10 +106,7 @@ export default {
       form.email,
       form.password
     );
-
-    const expiresIn = +responseData.expiresIn * 1000;
-    // const expiresIn = 5000;
-    const expirationDate = new Date().getTime() + expiresIn;
+    console.log(user);
 
     localStorage.setItem("token", responseData.idToken);
     localStorage.setItem("userId", responseData.localId);
@@ -132,13 +130,12 @@ export default {
 
     router.push("/storefront");
   },
-  async fetchUserProfile({ commit }, user) {
-    // fetch user profile
-    // const userProfile = await fb.usersCollection.doc(user.uid).get()
-    //
-    // // set user profile in state
-    // commit('setUserProfile', userProfile.data())
-    //
-    // // change route to dashboar
+  async fetStoreData({ commit }, storeId) {
+    storesCollection
+      .doc(`${storeId}`)
+      .get()
+      .then((res) => {
+        console.log(res.data());
+      });
   },
 };

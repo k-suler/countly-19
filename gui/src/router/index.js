@@ -9,6 +9,7 @@ import Signup from "../components/Signup.vue";
 import RegisterStore from "../components/RegisterStore.vue";
 import ViewStoreFront from "@/views/ViewStoreFront";
 import RandomChart from "@/components/RandomChart.vue";
+import ViewStoreFront from "@/views/ViewStoreFront";
 Vue.use(VueRouter);
 
 const routes = [
