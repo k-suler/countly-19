@@ -4,7 +4,7 @@
       <v-col align-self="center" v-for="(counter, i) in counters" :key="i" cols="1" class="mx-1">
         <FlipCounter
             :value="counter"
-            :size="maxNumOfPeople"
+            size="100"
             :interval="false"
             mode="up"
         />
@@ -25,8 +25,7 @@ export default {
   },
   data() {
     return {
-      value: 0,
-      maxNumOfPeople: 0,
+      value: 5,
       counters: []
     }
   },
