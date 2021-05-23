@@ -45,11 +45,9 @@ export default {
   },
   mounted() {
     this.allStores = this.getAllStores
-    console.log(this.getAllStores)
   },
   methods: {
     openStoreAnalysis(store) {
-      console.log(store)
       this.$router.push({name: "chart", params: {storeId: store.storeId}})
     }
   }

@@ -1,13 +1,15 @@
 <template>
   <v-container class="small">
-    <v-row>
-      <v-col>{{ store.name }}</v-col>
-      <v-col cols="12">
-        <template v-if="datacollection && storeId">
-          <line-chart :chart-data="datacollection"></line-chart>
-        </template>
-      </v-col>
-    </v-row>
+    <v-card class="pa-10">
+      <v-row>
+        <v-col>Statistics for store: {{ store.name }}</v-col>
+        <v-col cols="12">
+          <template>
+            <line-chart :chart-data="datacollection"></line-chart>
+          </template>
+        </v-col>
+      </v-row>
+    </v-card>
   </v-container>
 </template>
 
@@ -17,22 +19,30 @@ import { database, storesCollection } from "@/firebase/firebase";
 import dayjs from "dayjs";
 
 export default {
-  props: {
-    storeId: String,
-  },
   components: {
     LineChart,
   },
+  props: {
+    storeId: String,
+  },
   data() {
     return {
-      datacollection: null,
+      datacollection: {
+        labels: [],
+        datasets: [
+          {
+            label: "Number of customers",
+            backgroundColor: "#f87979",
+            data: [],
+          },
+        ],
+      },
       store: {
         groundTruth: 0,
         startTime: 0,
         description: "",
         name: "",
       },
-      graph: null,
       timeStep: 5,
     };
   },
@@ -42,17 +52,19 @@ export default {
         .doc(this.storeId)
         .get()
         .then((res) => {
-          console.log(res.data());
           this.setData(res.data());
         });
       const vm = this;
       const starCountRef = database
         .ref(`stores/${this.storeId}`)
         .orderByKey()
-        .startAt(vm.store.startTime.seconds + "");
+        .startAt(`${vm.store.startTime.seconds}`);
+
       starCountRef.on("value", (snapshot) => {
         const data = snapshot.val();
-        this.fillData(data);
+        if (data) {
+          this.fillData(data);
+        }
       });
     }
   },
@@ -60,12 +72,8 @@ export default {
     fillData(data) {
       const y = [];
       const x = [];
-      let counter = 0;
-      const startingFrom = Math.floor(this.store.startTime.seconds / 1000);
       const timeNow = Math.floor(Date.now() / 1000);
-      debugger;
       let stepCount = this.store.groundTruth;
-      data;
       for (const [key, value] of Object.entries(data)) {
         if (Math.floor(key / 1000) < timeNow) {
           let label = new Date(Number(key));
